@@ -40,6 +40,11 @@ model User {
   updatedAt                     DateTime       @updatedAt
 
   @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([verificationToken])  
+  @@index([passwordResetToken])
+
 }
 
 model Company {
@@ -66,6 +71,9 @@ model Company {
   owner               User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   jobs                Job[]    @relation("CompanyJobs")
  
+  @@index([slug])      
+  @@index([industry])  
+  @@index([ownerId])
 }
 
 model Job {
@@ -95,11 +103,13 @@ model Job {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
+  @@index([status, type, experienceLevel])
   @@index([employerId])
   @@index([companyId])
   @@index([status])
   @@index([type])
   @@index([createdAt])
+  @@index([expiresAt])
 }
 
 model Application {

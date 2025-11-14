@@ -1,4 +1,5 @@
 import { ExceptionFilter,Catch,ArgumentsHost,HttpException,HttpStatus } from "@nestjs/common";  
+import { ThrottlerException } from "@nestjs/throttler";
 import { Prisma } from "@prisma/client";
 
 
@@ -11,11 +12,21 @@ export class AllExceptionsFilter implements ExceptionFilter {
         
         if(exception instanceof HttpException) {
             status= exception.getStatus()
-            message= exception.getResponse()
+            const exceptionResponse= exception.getResponse()
+            message= typeof exceptionResponse === 'string'?
+            {success: false, message: exceptionResponse}
+            :{success: false, ...exceptionResponse}
+        } else if (exception instanceof ThrottlerException) {
+            status= exception.getStatus()
+            message= {
+                    success: false,
+                    message: 'Too many requests. Please try again later.',
+                    error: 'Rate Limit Exceeded',
+            }
         }
         else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
             if(exception.code === 'P2002') {
-                status= HttpStatus.BAD_REQUEST
+                status= HttpStatus.CONFLICT
                 message= {
                     success: false,
                     message: `Duplicated Field: 
@@ -64,12 +75,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
         } 
         else {
              status= HttpStatus.INTERNAL_SERVER_ERROR
-             
              message= {
                 success: false,
                 message: 'Internal server error'
             } 
         }
+
         response.status(status).json({
             ...message,
             timestamps: new Date().toISOString(),

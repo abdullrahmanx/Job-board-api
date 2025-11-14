@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UserPayLoad } from 'src/common/interfaces/all-interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCompanydDto } from './DTO/create-company-dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { UploadApiResponse } from 'cloudinary';
 import { GetCompaniesDto } from './DTO/GetCompaniteDto';
-import { contains } from 'class-validator';
+
 import { UpdateCompanyDto } from './DTO/update-company-dto';
 
 @Injectable()

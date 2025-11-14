@@ -1,5 +1,5 @@
-import { IsOptional, IsEnum, IsString, IsNumber, Min, IsNotEmpty } from "class-validator";
-import { Transform, Type } from "class-transformer";
+import { IsOptional, IsEnum, IsString, IsNumber, Min, Max, max } from "class-validator";
+import { Transform } from "class-transformer";
 import { JobType, ExperienceLevel, JobStatus } from "@prisma/client";
 
 export class GetJobsDto {
@@ -12,6 +12,7 @@ export class GetJobsDto {
     @IsOptional()
     @IsNumber()
     @Min(1)
+    @Max(100)
     limit?: number
 
     @IsOptional()

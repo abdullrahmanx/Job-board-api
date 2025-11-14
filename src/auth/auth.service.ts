@@ -81,10 +81,10 @@ export class AuthService {
 
         const url= `${process.env.FRONTEND_URL}/auth/verify-email/${verifyToken}`
        
-        // await sendEmail(newUser.email,'verification',{
-        //     name: newUser.name,
-        //     url}
-        // )
+        await sendEmail(newUser.email,'verification',{
+            name: newUser.name,
+            url}
+        )
 
         
         return {
@@ -145,9 +145,9 @@ export class AuthService {
         const isPasswordValid= await bcrypt.compare(password,user.password)
         if (!isPasswordValid) throw new UnauthorizedException('Email or password is incorrect');
 
-        // if(!user.isActive) {
-        //   throw new  UnauthorizedException('Email verification is required');
-        // }
+        if(!user.isActive) {
+          throw new  UnauthorizedException('Email verification is required');
+        }
         const tokens = await this.generateTokens(user.id,user.name,user.role)
         await this.prisma.user.update({
                 where: { id: user.id },
@@ -157,7 +157,7 @@ export class AuthService {
         });
         return {
             success: true,
-            message: 'Login successful',
+            message: 'Login successfully',
             data: {
                 id: user.id,
                 name: user.name

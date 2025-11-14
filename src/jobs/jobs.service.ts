@@ -2,16 +2,16 @@ import { Injectable, NotFoundException, BadRequestException,UnauthorizedExceptio
 import { UserPayLoad } from 'src/common/interfaces/all-interfaces';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateJobDto } from './DTO/create-job-dto';
-import { title } from 'process';
 import { GetJobsDto } from './DTO/GetJobs-dto';
-import { contains } from 'class-validator';
 import { UpdateJobDto } from './DTO/update-job-dto';
 import { UpdateStatus } from './DTO/update-job-status-dto';
+
 
 @Injectable()
 export class JobsService {
     constructor(private prisma: PrismaService) {}
 
+    
     async postJob( dto: CreateJobDto,user: UserPayLoad) {
         const company= await this.prisma.company.findUnique({
             where: {
@@ -229,7 +229,7 @@ export class JobsService {
             throw new NotFoundException('Job not found')
         }
 
-        if(user.id !== 'ADMIN' && job.company.ownerId !== user.id) {
+        if(user.role !== 'ADMIN' && job.company.ownerId !== user.id) {
             throw new UnauthorizedException("Only admin and company owners can update jobs's status")
         }
 

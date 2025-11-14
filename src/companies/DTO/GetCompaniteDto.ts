@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsOptional, IsString,Min } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString,Max,Min } from "class-validator";
 
 export class GetCompaniesDto {
 
@@ -10,6 +10,7 @@ export class GetCompaniesDto {
     @IsOptional()
     @IsNumber()
     @Min(1)
+    @Max(100)
     limit?: number
 
     @IsOptional()
