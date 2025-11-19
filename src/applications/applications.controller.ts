@@ -17,8 +17,6 @@ export class ApplicationsController {
     constructor(private applicationService: ApplicationsService) {}
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Create application' })
-    @ApiBearerAuth()
     @Throttle({ medium: { limit: 10, ttl: 3600000 } })
     @Post('/')
     @UseInterceptors(FileInterceptor('resume'))
@@ -28,8 +26,6 @@ export class ApplicationsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Get paginated applications' })
-    @ApiBearerAuth()
     @SkipThrottle()
     @Get('/')
     async getApplications(@Query() dto: GetApplicationsDto,@CurrentUser() user: UserPayLoad) {
@@ -37,8 +33,6 @@ export class ApplicationsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Create application by id' })
-    @ApiBearerAuth()
     @SkipThrottle()
     @Get('/:id')
     async getApplication(@Param('id') id: string,@CurrentUser() user: UserPayLoad) {
@@ -46,8 +40,6 @@ export class ApplicationsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Update application for employers' })
-    @ApiBearerAuth()
     @Throttle({ strict: { limit: 10, ttl: 60000 } })
     @Put('/:id/employer')
     async updateApplicationEmployer(@Param('id') id: string,@Body() dto: UpdateApplicationEmployerDto,
@@ -57,8 +49,6 @@ export class ApplicationsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Update application for job_seekers' })
-    @ApiBearerAuth()
     @Throttle({ short: { limit: 10, ttl: 3600000 } })
     @Put('/:id/job-seeker')
     @UseInterceptors(FileInterceptor('resume'))
@@ -69,8 +59,6 @@ export class ApplicationsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Update application for admin' })
-    @ApiBearerAuth()
      @Throttle({ strict: { limit: 10, ttl: 60000 } })
     @Put('/:id/admin')
     async updateApplicationAdmin(@Param('id') id: string, @Body() dto: UpdateApplicationAdminDto,
@@ -80,8 +68,6 @@ export class ApplicationsController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({ summary: 'Delete application' })
-    @ApiBearerAuth()
     @Throttle({ strict: { limit: 30, ttl: 60000 } })
     @Delete('/:id')
     async deleteApplication(@Param('id') id: string, @CurrentUser() user: UserPayLoad) {
