@@ -16,16 +16,12 @@ export class UsersController {
 
     @SkipThrottle()
     @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @ApiOperation({summary: 'Get user profile'})
     @Get('me')
     async getProfile(@CurrentUser() user: UserPayLoad) {
         return this.userService.getProfile(user)
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @ApiOperation({summary: 'Update user profile'})
     @Throttle({strict: {limit: 10, ttl: 60000}})
     @Put('me')
     @UseInterceptors(FileInterceptor('logo'))
@@ -36,8 +32,6 @@ export class UsersController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @ApiBearerAuth()
-    @ApiOperation({summary: 'Delete account'})
     @Throttle({ medium: { limit: 20, ttl: 3600000 } })
     @Delete('/me')
     async deleteUser(@Body() dto: DeleteUserDto,@CurrentUser() user: UserPayLoad) {
